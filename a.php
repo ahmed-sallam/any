@@ -1,6 +1,8 @@
 <?php
-class ControllerCheckoutConfirm extends Controller {
-	public function index() {
+class ControllerCheckoutConfirm extends Controller
+{
+	public function index()
+	{
 		$redirect = '';
 
 		if ($this->cart->hasShipping()) {
@@ -79,6 +81,9 @@ class ControllerCheckoutConfirm extends Controller {
 
 			array_multisort($sort_order, SORT_ASC, $results);
 
+			$this->load->model('extension/total/' . 'payment');
+			$this->{'model_extension_total_' . 'payment'}->getTotal($total_data);
+			// print_r($results);
 			foreach ($results as $result) {
 				if ($this->config->get('total_' . $result['code'] . '_status')) {
 					$this->load->model('extension/total/' . $result['code']);
@@ -89,7 +94,7 @@ class ControllerCheckoutConfirm extends Controller {
 			}
 
 			$sort_order = array();
-
+			print_r($totals);
 			foreach ($totals as $key => $value) {
 				$sort_order[$key] = $value['sort_order'];
 			}
@@ -113,7 +118,7 @@ class ControllerCheckoutConfirm extends Controller {
 					$order_data['store_url'] = HTTP_SERVER;
 				}
 			}
-			
+
 			$this->load->model('account/customer');
 
 			if ($this->customer->isLogged()) {
